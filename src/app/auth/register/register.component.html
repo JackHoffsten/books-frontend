@@ -1,0 +1,50 @@
+<div class="auth-page card shadow-sm mx-auto mt-5 p-4">
+  <h2 class="mb-2">Registrera dig</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="username" class="form-label">Användarnamn</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        formControlName="username"
+        placeholder="Ange användarnamn"
+      >
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">E-post</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        formControlName="email"
+        placeholder="Ange e-post"
+      >
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Lösenord</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        formControlName="password"
+        placeholder="Ange lösenord"
+      >
+    </div>
+    @if (errorMessage) {
+      <div class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+    }
+    <button
+      type="submit"
+      class="btn btn-primary w-100"
+      [disabled]="registerForm.invalid"
+    >
+      Registrera dig
+    </button>
+  </form>
+  <p class="mt-3 text-center text-muted">
+    Har du redan ett konto? <a routerLink="/login">Logga in här</a>
+  </p>
+</div>
