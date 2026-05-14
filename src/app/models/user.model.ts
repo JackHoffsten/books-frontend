@@ -1,6 +1,6 @@
 export interface User {
-  id: number;
   username: string;
+  email: string;
 }
 
 export interface LoginCredentials {
@@ -15,6 +15,9 @@ export interface RegisterCredentials {
 }
 
 export interface AuthResponse {
+  id: number;
+  username: string;
+  email: string;
   token: string;
 }
 
