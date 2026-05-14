@@ -48,8 +48,8 @@
         </div>
       }
     </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">Lösenord</label>
+    <label for="password" class="form-label">Lösenord</label>
+    <div class="input-group mb-3">
       <input
         type="password"
         class="form-control"
@@ -58,6 +58,9 @@
         placeholder="Ange lösenord"
         [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
       >
+      <span class="input-group-text" (click)="togglePasswordVisibility()" style="cursor: pointer;">
+        <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
+      </span>
       @if (registerForm.get('password')?.errors?.['required'] && registerForm.get('password')?.touched) {
         <div class="invalid-feedback">
           Lösenord är obligatoriskt.

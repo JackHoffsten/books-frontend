@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ApiError, ErrorCode } from '../../models/api-error.model';
 
@@ -20,6 +20,7 @@ export class RegisterComponent {
   protected showPassword: boolean = false;
   protected errorMessage: string = '';
   private readonly authService: AuthService = inject(AuthService);
+  private readonly router: Router = inject(Router);
 
   onSubmit() {
     if (this.registerForm.invalid) {
@@ -32,7 +33,7 @@ export class RegisterComponent {
     this.authService.register(this.registerForm.value).subscribe({
       next: (response) => {
         console.log('Registrering lyckades:', response);
-        // TODO: Navigate to books page
+        this.router.navigate(['books']);
       },
       error: (error: ApiError) => {
         console.error('Registrering misslyckades:', error);
@@ -60,5 +61,9 @@ export class RegisterComponent {
         }
       }
     });
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 }
