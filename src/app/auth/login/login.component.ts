@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ApiError, ErrorCode } from '../../models/api-error.model';
 
 @Component({
   selector: 'app-login',
@@ -32,9 +33,18 @@ export class LoginComponent {
         console.log('Inloggning lyckades:', response);
         // TODO: Navigate to books page
       },
-      error: (error) => {
+      error: (error: ApiError) => {
         console.error('Inloggning misslyckades:', error);
-        this.errorMessage = 'Inloggning misslyckades. Kontrollera dina uppgifter och försök igen.';
+        switch (error.code) {
+          case ErrorCode.INVALID_CREDENTIALS:
+            this.errorMessage = 'Felaktigt användarnamn eller lösenord.';
+            break;
+          case ErrorCode.INTERNAL_SERVER_ERROR:
+            this.errorMessage = 'Ett fel uppstod vid inloggning. Försök igen senare.';
+            break;
+          default:
+            this.errorMessage = 'Inloggning misslyckades. Kontrollera dina uppgifter och försök igen.';
+        }
       }
     });
   }

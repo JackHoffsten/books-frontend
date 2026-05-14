@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ApiError, ErrorCode } from '../../models/api-error.model';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,7 @@ export class RegisterComponent {
   protected registerForm: FormGroup = inject(FormBuilder).group({
     username: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required],
+    password: ['', [Validators.required, Validators.minLength(6)]],
   });
   protected showPassword: boolean = false;
   protected errorMessage: string = '';
@@ -33,11 +34,31 @@ export class RegisterComponent {
         console.log('Registrering lyckades:', response);
         // TODO: Navigate to books page
       },
-      error: (error) => {
+      error: (error: ApiError) => {
         console.error('Registrering misslyckades:', error);
-        this.errorMessage = 'Registrering misslyckades. Försök igen senare.';
+        switch (error.code) {
+          case ErrorCode.USERNAME_EMPTY:
+            this.registerForm.get('username')?.setErrors({ required: true });
+            break;
+          case ErrorCode.EMAIL_EMPTY:
+            this.registerForm.get('email')?.setErrors({ required: true });
+            break;
+          case ErrorCode.USERNAME_TAKEN:
+            this.registerForm.get('username')?.setErrors({ taken: true });
+            break;
+          case ErrorCode.EMAIL_TAKEN:
+            this.registerForm.get('email')?.setErrors({ taken: true });
+            break;
+          case ErrorCode.PASSWORD_TOO_SHORT:
+            this.registerForm.get('password')?.setErrors({ minlength: true });
+            break;
+          case ErrorCode.INTERNAL_SERVER_ERROR:
+            this.errorMessage = 'Ett fel uppstod vid registrering. Försök igen senare.';
+            break;
+          default:
+            this.errorMessage = 'Ett fel uppstod vid registrering. Försök igen senare.';
+        }
       }
     });
   }
-
 }

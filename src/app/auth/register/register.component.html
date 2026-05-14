@@ -9,7 +9,18 @@
         id="username"
         formControlName="username"
         placeholder="Ange användarnamn"
+        [class.is-invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
       >
+      @if (registerForm.get('username')?.errors?.['required'] && registerForm.get('username')?.touched) {
+        <div class="invalid-feedback">
+          Användarnamn är obligatoriskt.
+        </div>
+      }
+      @if (registerForm.get('username')?.errors?.['taken'] && registerForm.get('username')?.touched) {
+        <div class="invalid-feedback">
+          Användarnamnet är redan taget.
+        </div>
+      }
     </div>
     <div class="mb-3">
       <label for="email" class="form-label">E-post</label>
@@ -19,7 +30,23 @@
         id="email"
         formControlName="email"
         placeholder="Ange e-post"
+        [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
       >
+      @if (registerForm.get('email')?.errors?.['required'] && registerForm.get('email')?.touched) {
+        <div class="invalid-feedback">
+          E-postadress är obligatorisk.
+        </div>
+      }
+      @if (registerForm.get('email')?.errors?.['email'] && registerForm.get('email')?.touched) {
+        <div class="invalid-feedback">
+          Ange en giltig e-postadress.
+        </div>
+      }
+      @if (registerForm.get('email')?.errors?.['taken'] && registerForm.get('email')?.touched) {
+        <div class="invalid-feedback">
+          E-postadressen är redan registrerad.
+        </div>
+      }
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Lösenord</label>
@@ -29,7 +56,18 @@
         id="password"
         formControlName="password"
         placeholder="Ange lösenord"
+        [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
       >
+      @if (registerForm.get('password')?.errors?.['required'] && registerForm.get('password')?.touched) {
+        <div class="invalid-feedback">
+          Lösenord är obligatoriskt.
+        </div>
+      }
+      @if (registerForm.get('password')?.errors?.['minlength'] && registerForm.get('password')?.touched) {
+        <div class="invalid-feedback">
+          Lösenordet måste vara minst 6 tecken långt.
+        </div>
+      }
     </div>
     @if (errorMessage) {
       <div class="alert alert-danger">
