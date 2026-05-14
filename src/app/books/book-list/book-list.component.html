@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="h3">Böcker</h1>
+    <p class="text-muted">Hantera din lista med böcker.</p>
+  </div>
+  <a routerLink="/books/new" class="btn btn-primary">Lägg till ny bok</a>
+</div>
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Titel</th>
+        <th>Författare</th>
+        <th>Beskrivning</th>
+        <th>Publiceringsdatum</th>
+        <th class="text-end">Åtgärder</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (book of books$ | async; track book.id) {
+        <tr>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.description }}</td>
+          <td>{{ book.publishedDate | date:'longDate' }}</td>
+        </tr>
+        <td class="text-end">
+          <a [routerLink]="['/books', book.id]" class="btn btn-outline-secondary btn-sm me-2">
+            <i class="fa-solid fa-pen-to-square"></i> Redigera
+          </a>
+          <button class="btn btn-outline-danger btn-sm" (click)="deleteBook(book.id)">
+            <i class="fa-solid fa-trash"></i> Radera
+          </button>
+        </td>
+      }
+    </tbody>
+  </table>
+</div>
