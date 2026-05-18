@@ -25,15 +25,6 @@ pipeline {
               -w /app \
               node:24.15.0-alpine \
               sh -c "npm ci && npm run build -- --configuration=production"
-
-            docker run --rm \
-              -v /var/www/books:/target \
-              -v $PWD/dist/books-frontend:/source \
-              alpine \
-              sh -c "rm -rf /target/* && cp -r /source/* /target/"
-            
-            nginx -t
-            nginx -s reload
           '''
         }
       }
