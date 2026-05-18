@@ -18,7 +18,9 @@ export class BookListComponent {
 
   protected books$: Observable<Book[]> = this.bookService.getBooks(); 
 
-  goToBook(id: number) {
+  editBook(id: number, event: Event) {
+    event.stopPropagation();
+
     this.router.navigate(['/books', id])
   }
 
