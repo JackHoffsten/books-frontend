@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" style="cursor: pointer;" routerLink="/">Books</a>
+    <button class="navbar-toggler" type="button" (click)="toggleMenu()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" [class.show]="isMenuOpen">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-end">
+        @if (isAuthenticated()) {
+          <li class="nav-item">
+            <a class="nav-link" style="cursor: pointer;" routerLink="/books" (click)="closeMenu()">Böcker</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="cursor: pointer;" routerLink="/quotes" (click)="closeMenu()">Mina citat</a>
+          </li>
+        }
+      </ul>
+      <div class="d-flex gap-2 navbar-nav mb-2 mb-lg-0 align-items-end">
+        @if (isAuthenticated()) {
+          <button class="btn btn-danger btn-sm" type="button" (click)="logout()">
+            Logga ut
+          </button>
+        } @else {
+          <div class="d-flex flex-column flex-lg-row gap-2 w-100">
+            <a class="btn btn-primary btn-sm" routerLink="/login" (click)="closeMenu()">Logga in</a>
+            <a class="btn btn-outline-primary btn-sm" routerLink="/register" (click)="closeMenu()">Registrera</a>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</nav>
