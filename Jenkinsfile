@@ -7,26 +7,32 @@ pipeline {
     }
   }
 
+  environment {
+    FRONTEND_IMAGE_NAME = "books-frontend"
+  }
+
   stages {
     stage('Build') {
       steps {
-        sh '''
-          npm ci --only=production
-          
-          npm run build -- --configuration=production
-        '''
-      }
-    }
+        script {
+          env.GIT_SHA = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
 
-    stage('Deploy') {
-      steps {
-        sh '''
-          sudo rm -rf /var/www/books/*
-          sudo cp -r dist/books-frontend/* /var/www/books/
-          
-          sudo nginx -t
-          sudo nginx -s reload
-        '''
+          sh '''
+            echo "Building ${FRONTEND_IMAGE_NAME}:${GIT_SHA}"
+            
+            docker run --rm \
+              -v $PWD:/app \
+              -w /app \
+              node:24.15.0-alpine \
+              sh -c "npm ci && npm run build -- --configuration=production"
+            
+            sudo rm -rf /var/www/books/*
+            sudo cp -r dist/books-frontend/* /var/www/books/
+            
+            sudo nginx -t
+            sudo nginx -s reload
+          '''
+        }
       }
     }
   }
