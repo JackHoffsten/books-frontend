@@ -7,7 +7,7 @@ export const redirectIfAuthGuard: CanActivateFn = () => {
   const router: Router = inject(Router);
   
   if (authService.isAuthenticated()) {
-    router.navigate(['/books']);
+    router.navigate(['books']);
     return false;
   }
 
