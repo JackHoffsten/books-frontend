@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { BookService } from '../../services/book.service';
 import { Book } from '../../models/book.model';
 import { Observable } from 'rxjs';
@@ -14,11 +14,18 @@ import { Observable } from 'rxjs';
 })
 export class BookListComponent {
   private readonly bookService: BookService = inject(BookService);
+  private readonly router: Router = inject(Router);
 
   protected books$: Observable<Book[]> = this.bookService.getBooks(); 
 
-  deleteBook(id: number) {
-    if (confirm('Är du säker på att du vill ta bort den här boken?')) {
+  goToBook(id: number) {
+    this.router.navigate(['/books', id])
+  }
+
+  deleteBook(id: number, title: string, event: Event) {
+    event.stopPropagation();
+
+    if (confirm(`Är du säker på att du vill ta bort ${title}?`)) {
       this.bookService.deleteBook(id).subscribe({
         next: () => {
           this.books$ = this.bookService.getBooks();

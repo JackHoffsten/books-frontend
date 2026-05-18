@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink, ActivatedRoute } from '@angular/router';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { BookService } from '../../services/book.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateBook, UpdateBook } from '../../models/book.model';
@@ -13,7 +13,8 @@ import { CreateBook, UpdateBook } from '../../models/book.model';
 })
 export class BookFormComponent {
   private readonly bookService: BookService = inject(BookService);
-  private readonly route = inject(ActivatedRoute);
+  private readonly route: ActivatedRoute = inject(ActivatedRoute);
+  private readonly router: Router = inject(Router);
 
   protected bookForm: FormGroup = inject(FormBuilder).group({
     title: ['', Validators.required],
@@ -44,7 +45,7 @@ export class BookFormComponent {
       const updatedBook: UpdateBook = this.bookForm.value;
       this.bookService.updateBook(this.bookId, updatedBook).subscribe({
         next: () => {
-          // Handle successful update
+          this.router.navigate(['/books'])
         },
         error: (error) => {
           console.error('Kunde inte uppdatera boken:', error);
@@ -55,7 +56,7 @@ export class BookFormComponent {
       const createdBook: CreateBook = this.bookForm.value;
       this.bookService.createBook(createdBook).subscribe({
         next: () => {
-          // Handle successful creation
+          this.router.navigate(['/books'])
         },
         error: (error) => {
           console.error('Kunde inte skapa boken:', error);
