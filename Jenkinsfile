@@ -26,8 +26,11 @@ pipeline {
               node:24.15.0-alpine \
               sh -c "npm ci && npm run build -- --configuration=production"
 
-            rm -rf /var/www/books/*
-            cp -r dist/books-frontend/* /var/www/books/
+            docker run --rm \
+              -v /var/www/books:/target \
+              -v $PWD/dist/books-frontend:/source \
+              alpine \
+              sh -c "rm -rf /target/* && cp -r /source/* /target/"
             
             nginx -t
             nginx -s reload
