@@ -6,6 +6,6 @@ import { catchError } from 'rxjs';
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const errorHandler = inject(ErrorHandlerService);
   return next(req).pipe(
-    catchError(error => errorHandler.handleError(error))
+    catchError(error => errorHandler.handleError(req, error, next))
   );
 };

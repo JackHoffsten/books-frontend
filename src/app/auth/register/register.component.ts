@@ -12,6 +12,9 @@ import { ApiError, ErrorCode } from '../../models/api-error.model';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly router: Router = inject(Router);
+
   protected registerForm: FormGroup = inject(FormBuilder).group({
     username: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
@@ -19,8 +22,6 @@ export class RegisterComponent {
   });
   protected showPassword: boolean = false;
   protected errorMessage: string = '';
-  private readonly authService: AuthService = inject(AuthService);
-  private readonly router: Router = inject(Router);
 
   onSubmit() {
     if (this.registerForm.invalid) {
@@ -31,8 +32,7 @@ export class RegisterComponent {
     this.errorMessage = '';
 
     this.authService.register(this.registerForm.value).subscribe({
-      next: (response) => {
-        console.log('Registrering lyckades:', response);
+      next: () => {
         this.router.navigate(['books']);
       },
       error: (error: ApiError) => {

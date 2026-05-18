@@ -12,14 +12,15 @@ import { ApiError, ErrorCode } from '../../models/api-error.model';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly router: Router = inject(Router);
+
   protected readonly loginForm: FormGroup = inject(FormBuilder).group({
     username: ['', Validators.required],
     password: ['', Validators.required],
   });
   protected showPassword: boolean = false;
   protected errorMessage: string = '';
-  private readonly authService: AuthService = inject(AuthService);
-  private readonly router: Router = inject(Router);
 
   onSubmit() {
     if (this.loginForm.invalid) {
@@ -30,8 +31,7 @@ export class LoginComponent {
     this.errorMessage = '';
 
     this.authService.login(this.loginForm.value).subscribe({
-      next: (response) => {
-        console.log('Inloggning lyckades:', response);
+      next: () => {
         this.router.navigate(['books']);
       },
       error: (error: ApiError) => {

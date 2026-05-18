@@ -8,26 +8,26 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class BookService {
-  private readonly apiUrl = `${environment.apiUrl}/books`;
+  private readonly API_URL = `${environment.apiUrl}/books`;
   private readonly http: HttpClient = inject(HttpClient);
 
   getBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.apiUrl);
+    return this.http.get<Book[]>(this.API_URL);
   }
 
   getBook(id: number): Observable<Book> {
-    return this.http.get<Book>(`${this.apiUrl}/${id}`);
+    return this.http.get<Book>(`${this.API_URL}/${id}`);
   }
 
   createBook(book: CreateBook): Observable<Book> {
-    return this.http.post<Book>(this.apiUrl, book);
+    return this.http.post<Book>(this.API_URL, book);
   }
 
   updateBook(id: number, book: UpdateBook): Observable<Book> {
-    return this.http.put<Book>(`${this.apiUrl}/${id}`, book);
+    return this.http.put<Book>(`${this.API_URL}/${id}`, book);
   }
 
   deleteBook(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 }

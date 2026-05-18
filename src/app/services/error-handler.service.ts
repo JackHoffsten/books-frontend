@@ -1,18 +1,33 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { HttpErrorResponse, HttpHandlerFn, HttpRequest } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError } from 'rxjs';
 import { ApiError, ErrorCode } from '../models/api-error.model';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ErrorHandlerService {
-  handleError(error: HttpErrorResponse): Observable<never> {
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly router: Router = inject(Router);
+
+  private isRefreshingToken: boolean = false;
+  private waitingRequests: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
+  handleError(req: HttpRequest<unknown>, error: HttpErrorResponse, next: HttpHandlerFn): Observable<never> {
+    console.error('HTTP Error:', error);
+
     const apiError = this.transformToApiError(error);
     console.error('API Error:', apiError);
 
     if (apiError.status === 401) {
-      // TODO: Refresh token or redirect to login
+      if (req.url.includes('/refresh-token')) {
+        this.handleLogout();
+        return throwError(() => apiError);
+      }
+
+      return this.tryRefreshToken(req, next, apiError);
     }
 
     return throwError(() => apiError);
@@ -36,5 +51,41 @@ export class ErrorHandlerService {
       code: error.error.code || ErrorCode.UNKNOWN_ERROR,
       timestamp: error.error.timestamp || new Date().toISOString(),
     };
+  }
+
+  private tryRefreshToken(req: HttpRequest<unknown>, next: HttpHandlerFn, apiError: ApiError): Observable<never> {
+    if (!this.isRefreshingToken) {
+      this.isRefreshingToken = true;
+      this.waitingRequests.next(null);
+
+      return this.authService.refreshToken().pipe(
+        switchMap((response: any) => {
+          this.isRefreshingToken = false;
+          this.waitingRequests.next(response.accessToken);
+          
+          return next(req);
+        }),
+        catchError(() => {
+          this.isRefreshingToken = false;
+          this.handleLogout();
+          return throwError(() => apiError);
+        })
+      ) as Observable<never>;
+    }
+
+    return this.waitingRequests.pipe(
+      filter(token => token !== null),
+      take(1),
+      switchMap(() => {
+        return next(req);
+      })
+    ) as Observable<never>;
+  }
+
+  private handleLogout() {
+    this.authService.logout();
+    this.router.navigate(['/login'], {
+      queryParams: { returnUrl: this.router.url }
+    });
   }
 }

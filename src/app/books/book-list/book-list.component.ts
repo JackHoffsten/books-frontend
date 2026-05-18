@@ -7,12 +7,14 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-book-list',
+  standalone: true,
   imports: [AsyncPipe, DatePipe, RouterLink],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.css',
 })
 export class BookListComponent {
   private readonly bookService: BookService = inject(BookService);
+
   protected books$: Observable<Book[]> = this.bookService.getBooks(); 
 
   deleteBook(id: number) {
