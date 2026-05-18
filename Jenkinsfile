@@ -25,12 +25,12 @@ pipeline {
               -w /app \
               node:24.15.0-alpine \
               sh -c "npm ci && npm run build -- --configuration=production"
+
+            rm -rf /var/www/books/*
+            cp -r dist/books-frontend/* /var/www/books/
             
-            sudo rm -rf /var/www/books/*
-            sudo cp -r dist/books-frontend/* /var/www/books/
-            
-            sudo nginx -t
-            sudo nginx -s reload
+            nginx -t
+            nginx -s reload
           '''
         }
       }
