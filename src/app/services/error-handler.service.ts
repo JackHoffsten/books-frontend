@@ -17,10 +17,7 @@ export class ErrorHandlerService {
   private waitingRequests: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   handleError(req: HttpRequest<unknown>, error: HttpErrorResponse, next: HttpHandlerFn): Observable<never> {
-    console.error('HTTP Error:', error);
-
     const apiError = this.transformToApiError(error);
-    console.error('API Error:', apiError);
 
     if (apiError.status === 401) {
       if (req.url.includes('/refresh-token')) {
