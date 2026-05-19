@@ -17,6 +17,8 @@ export class ErrorHandlerService {
   private waitingRequests: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   handleError(req: HttpRequest<unknown>, error: HttpErrorResponse, next: HttpHandlerFn): Observable<never> {
+    console.log(error);
+
     const apiError = this.transformToApiError(error);
 
     if (apiError.status === 401) {
