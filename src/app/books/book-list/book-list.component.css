@@ -1,3 +1,33 @@
-.table-responsive {
-  min-height: 320px;
+.hover-shadow {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-shadow:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-title {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.card-text {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.btn-group .btn {
+  transition: all 0.2s ease;
+}
+
+.btn-group .btn:hover {
+  transform: scale(1.05);
 }
