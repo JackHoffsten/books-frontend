@@ -2,18 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { LoginCredentials, RegisterCredentials, AuthResponse } from '../models/user.model';
 import { Observable, tap } from 'rxjs';
-import { environment } from '../../environments/environment';
 import { CookieService } from './cookie.service';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly API_URL = `${environment.apiUrl}/auth`;
-  private readonly ACCESS_TOKEN_KEY = 'access_token';
-  private readonly REFRESH_TOKEN_KEY = 'refresh_token';
+  private readonly apiService: ApiService = inject(ApiService);
   private readonly http: HttpClient = inject(HttpClient);
   private readonly cookieService: CookieService = inject(CookieService);
+
+  private readonly API_URL = this.apiService.getUrl('/auth');
+  private readonly ACCESS_TOKEN_KEY = 'access_token';
+  private readonly REFRESH_TOKEN_KEY = 'refresh_token';
 
   login(credentials: LoginCredentials): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.API_URL}/login`, credentials).pipe(
