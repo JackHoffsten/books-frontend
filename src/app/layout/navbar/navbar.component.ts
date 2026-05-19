@@ -41,6 +41,7 @@ export class NavbarComponent {
   }
 
   logout() {
+    this.closeMenu();
     this.authService.logout();
     this.router.navigate(['login'])
   }
