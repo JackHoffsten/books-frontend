@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +13,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 export class NavbarComponent {
   private readonly authService: AuthService = inject(AuthService);
   private readonly router: Router = inject(Router);
+  protected themeService: ThemeService = inject(ThemeService);
 
   protected isMenuOpen: boolean = false;
   protected isUserMenuOpen: boolean = false;
@@ -23,6 +25,10 @@ export class NavbarComponent {
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
     this.isUserMenuOpen = false;
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 
   toggleUserMenu(event: Event) {
