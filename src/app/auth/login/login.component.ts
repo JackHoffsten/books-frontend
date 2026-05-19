@@ -21,6 +21,7 @@ export class LoginComponent {
   });
   protected showPassword: boolean = false;
   protected errorMessage: string = '';
+  protected isLoggingIn: boolean = false;
 
   onSubmit() {
     if (this.loginForm.invalid) {
@@ -28,10 +29,12 @@ export class LoginComponent {
       return;
     }
 
+    this.isLoggingIn = true;
     this.errorMessage = '';
 
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
+        this.isLoggingIn = false;
         this.router.navigate(['books']);
       },
       error: (error: ApiError) => {
@@ -46,6 +49,7 @@ export class LoginComponent {
           default:
             this.errorMessage = 'Inloggning misslyckades. Kontrollera dina uppgifter och försök igen.';
         }
+        this.isLoggingIn = false;
       }
     });
   }

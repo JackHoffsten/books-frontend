@@ -1,27 +1,68 @@
 <div class="card shadow-sm p-4 mx-auto">
   <h1 class="h4 mb-3">{{ bookId ? 'Redigera bok' : 'Lägg till bok' }}</h1>
-  <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
-    <div class="mb-3">
-      <label class="form-label">Titel</label>
-      <input formControlName="title" class="form-control" placeholder="Boktitel" />
+  @if (isLoading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Laddar bok...</span>
+      </div>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Författare</label>
-      <input formControlName="author" class="form-control" placeholder="Författare" />
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Publiceringsdatum</label>
-      <input type="date" formControlName="publishedDate" class="form-control" />
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Beskrivning</label>
-      <textarea formControlName="description" class="form-control" rows="4" placeholder="Kort beskrivning"></textarea>
-    </div>
-    <div class="d-flex gap-2">
-      <button type="submit" class="btn btn-primary" [disabled]="isSaving">
-        {{ bookId ? 'Spara ändringar' : 'Lägg till bok' }}
-      </button>
-      <a class="btn btn-outline-secondary" routerLink="/books">Avbryt</a>
-    </div>
-  </form>
+  } @else {
+    <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label class="form-label">Titel</label>
+        <input 
+          formControlName="title" 
+          class="form-control" 
+          [class.is-invalid]="bookForm.get('title')?.invalid && bookForm.get('title')?.touched"
+          placeholder="Boktitel" />
+        <div class="invalid-feedback">
+          Titel är obligatorisk
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Författare</label>
+        <input 
+          formControlName="author" 
+          class="form-control" 
+          [class.is-invalid]="bookForm.get('author')?.invalid && bookForm.get('author')?.touched"
+          placeholder="Författare" />
+        <div class="invalid-feedback">
+          Författare är obligatorisk
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Publiceringsdatum</label>
+        <input 
+          type="date" 
+          formControlName="publishedDate" 
+          class="form-control"
+          [class.is-invalid]="bookForm.get('publishedDate')?.invalid && bookForm.get('publishedDate')?.touched" />
+        <div class="invalid-feedback">
+          Publiceringsdatum är obligatoriskt
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Beskrivning</label>
+        <textarea 
+          formControlName="description" 
+          class="form-control" 
+          rows="4" 
+          placeholder="Kort beskrivning"></textarea>
+      </div>
+      <div class="d-flex gap-2">
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="isSaving || bookForm.invalid">
+          @if (isSaving) {
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+            {{ bookId ? 'Sparar...' : 'Lägger till...' }}
+          } @else {
+            {{ bookId ? 'Spara ändringar' : 'Lägg till bok' }}
+          }
+        </button>
+        <a class="btn btn-outline-secondary" routerLink="/books">Avbryt</a>
+      </div>
+    </form>
+  }
 </div>

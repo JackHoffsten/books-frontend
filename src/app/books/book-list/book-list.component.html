@@ -8,9 +8,8 @@
     <span class="d-none d-sm-inline"> Lägg till ny bok</span>
   </a>
 </div>
-@defer {
-  @let books = books$ | async;
-  @if (books && books.length > 0) {
+@if ((books$ | async); as books) {
+  @if (books.length > 0) {
     <div class="row g-4">
       @for (book of books; track book.id) {
         <div class="col-12 col-md-6 col-lg-4">
@@ -19,16 +18,10 @@
               <div class="d-flex justify-content-between align-items-start mb-3">
                 <h5 class="card-title text-primary mb-0 me-2">{{ book.title }}</h5>
                 <div class="btn-group btn-group-sm" (click)="$event.stopPropagation()">
-                  <button 
-                    class="btn btn-outline-secondary" 
-                    title="Redigera"
-                    (click)="editBook(book.id, $event)">
+                  <button class="btn btn-outline-secondary" title="Redigera" (click)="editBook(book.id, $event)">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
-                  <button 
-                    class="btn btn-outline-danger" 
-                    title="Ta bort"
-                    (click)="deleteBook(book.id, $event)">
+                  <button class="btn btn-outline-danger" title="Ta bort" (click)="deleteBook(book.id, $event)">
                     <i class="fa-solid fa-trash"></i>
                   </button>
                 </div>
@@ -58,15 +51,10 @@
       </a>
     </div>
   }
-} @loading {
+} @else {
   <div class="d-flex justify-content-center align-items-center py-5">
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Laddar böcker...</span>
     </div>
-  </div>
-} @error {
-  <div class="alert alert-danger text-center py-4" role="alert">
-    <i class="fa-solid fa-circle-exclamation fa-2x mb-2"></i>
-    <p class="mb-0">Kunde inte ladda böcker. Försök igen senare.</p>
   </div>
 }

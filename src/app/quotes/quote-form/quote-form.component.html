@@ -1,19 +1,53 @@
 <div class="card shadow-sm p-4 mx-auto">
   <h1 class="h4 mb-3">{{ quoteId ? 'Redigera citat' : 'Lägg till citat' }}</h1>
-  <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()">
-    <div class="mb-3">
-      <label class="form-label">Citat</label>
-      <input formControlName="text" class="form-control" placeholder="Citat" />
+  @if (isLoading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Laddar citat...</span>
+      </div>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Författare</label>
-      <input formControlName="author" class="form-control" placeholder="Författare" />
-    </div>
-    <div class="d-flex gap-2">
-      <button type="submit" class="btn btn-primary" [disabled]="isSaving">
-        {{ quoteId ? 'Spara ändringar' : 'Lägg till citat' }}
-      </button>
-      <a class="btn btn-outline-secondary" routerLink="/quotes">Avbryt</a>
-    </div>
-  </form>
+  } @else {
+    <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label class="form-label">Citat</label>
+        <input 
+          formControlName="text" 
+          class="form-control" 
+          [class.is-invalid]="quoteForm.get('text')?.invalid && quoteForm.get('text')?.touched"
+          placeholder="Citat" />
+        @if (quoteForm.get('text')?.invalid && quoteForm.get('text')?.touched) {
+          <div class="invalid-feedback">
+            Citat är obligatoriskt
+          </div>
+        }
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Författare</label>
+        <input 
+          formControlName="author" 
+          class="form-control" 
+          [class.is-invalid]="quoteForm.get('author')?.invalid && quoteForm.get('author')?.touched"
+          placeholder="Författare" />
+        @if (quoteForm.get('author')?.invalid && quoteForm.get('author')?.touched) {
+          <div class="invalid-feedback">
+            Författare är obligatorisk
+          </div>
+        }
+      </div>
+      <div class="d-flex gap-2">
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="isSaving || quoteForm.invalid">
+          @if (isSaving) {
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+            {{ quoteId ? 'Sparar...' : 'Lägger till...' }}
+          } @else {
+            {{ quoteId ? 'Spara ändringar' : 'Lägg till citat' }}
+          }
+        </button>
+        <a class="btn btn-outline-secondary" routerLink="/quotes">Avbryt</a>
+      </div>
+    </form>
+  }
 </div>

@@ -5,7 +5,6 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { errorInterceptor } from './interceptors/error.interceptor';
 import { authInterceptor } from './interceptors/auth.interceptor';
-import { loadingInterceptor } from './interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,7 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([authInterceptor, errorInterceptor, loadingInterceptor])
+      withInterceptors([authInterceptor, errorInterceptor])
     )
   ]
 };

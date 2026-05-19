@@ -17,8 +17,8 @@ export interface CreateBook {
 }
 
 export interface UpdateBook {
-  title?: string;
-  author?: string;
-  publishedDate?: string;
+  title: string;
+  author: string;
+  publishedDate: string;
   description?: string;
 }

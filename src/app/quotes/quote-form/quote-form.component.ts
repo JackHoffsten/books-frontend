@@ -22,6 +22,7 @@ export class QuoteFormComponent {
   });
   protected quoteId: number | null = null;
   protected isSaving: boolean = false;
+  protected isLoading: boolean = false;
 
   constructor() {
     this.route.paramMap.subscribe(params => {
@@ -65,6 +66,7 @@ export class QuoteFormComponent {
   }
 
   private loadQuote() {
+    this.isLoading = true;
     if (this.quoteId !== null) {
       this.quoteService.getQuote(this.quoteId).subscribe({
         next: (quote) => {
@@ -72,6 +74,12 @@ export class QuoteFormComponent {
             text: quote.text || '',
             author: quote.author || ''
           });
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.log('Error loading quote:', error);
+          this.isLoading = false;
+          alert('Ett fel uppstod vid hämtning av citatet. Försök igen senare.');
         }
       });
     }

@@ -13,6 +13,6 @@ export interface CreateQuote {
 }
 
 export interface UpdateQuote {
-  text?: string;
-  author?: string;
+  text: string;
+  author: string;
 }

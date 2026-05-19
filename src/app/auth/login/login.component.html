@@ -1,5 +1,11 @@
 <div class="auth-page card shadow-sm mx-auto mt-5 p-4">
   <h2 class="mb-2">Logga in</h2>
+  @if (errorMessage) {
+    <div class="alert alert-danger mb-3" role="alert">
+      <i class="fa-solid fa-circle-exclamation me-2"></i>
+      {{ errorMessage }}
+    </div>
+  }
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="mb-3">
       <label for="username" class="form-label">Användarnamn</label>
@@ -36,17 +42,17 @@
         </div>
       }
     </div>
-    @if (errorMessage) {
-      <div class="alert alert-danger">
-        {{ errorMessage }}
-      </div>
-    }
     <button
       type="submit"
       class="btn btn-primary w-100"
-      [disabled]="loginForm.invalid"
+      [disabled]="isLoggingIn || loginForm.invalid"
     >
-      Logga in
+      @if (isLoggingIn) {
+        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+        Loggar in...
+      } @else {
+        Logga in
+      }
     </button>
   </form>
   <p class="mt-3 text-center text-muted">

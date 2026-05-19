@@ -8,9 +8,8 @@
     <span class="d-none d-sm-inline"> Lägg till nytt citat</span>
   </a>
 </div>
-@defer {
-  @let quotes = quotes$ | async;
-  @if (quotes && quotes.length > 0) {
+@if ((quotes$ | async); as quotes) {
+  @if (quotes.length > 0) {
     <div class="row g-4">
       @for (quote of quotes; track quote.id) {
         <div class="col-12 col-md-6 col-lg-4">
@@ -53,15 +52,10 @@
       </a>
     </div>
   }
-} @loading {
+} @else {
   <div class="d-flex justify-content-center align-items-center py-5">
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Laddar citat...</span>
     </div>
-  </div>
-} @error {
-  <div class="alert alert-danger text-center py-4" role="alert">
-    <i class="fa-solid fa-circle-exclamation fa-2x mb-2"></i>
-    <p class="mb-0">Kunde inte ladda citat. Försök igen senare.</p>
   </div>
 }

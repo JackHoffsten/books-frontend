@@ -22,6 +22,7 @@ export class RegisterComponent {
   });
   protected showPassword: boolean = false;
   protected errorMessage: string = '';
+  protected isRegistering: boolean = false;
 
   onSubmit() {
     if (this.registerForm.invalid) {
@@ -29,11 +30,13 @@ export class RegisterComponent {
       return;
     }
 
+    this.isRegistering = true;
     this.errorMessage = '';
 
     this.authService.register(this.registerForm.value).subscribe({
       next: () => {
         this.router.navigate(['books']);
+        this.isRegistering = false;
       },
       error: (error: ApiError) => {
         console.error('Registrering misslyckades:', error);
@@ -59,6 +62,7 @@ export class RegisterComponent {
           default:
             this.errorMessage = 'Ett fel uppstod vid registrering. Försök igen senare.';
         }
+        this.isRegistering = false;
       }
     });
   }

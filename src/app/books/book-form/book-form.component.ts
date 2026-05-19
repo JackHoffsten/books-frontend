@@ -24,6 +24,7 @@ export class BookFormComponent {
   });
   protected bookId: number | null = null;
   protected isSaving: boolean = false;
+  protected isLoading: boolean = false;
 
   constructor() {
     this.route.paramMap.subscribe(params => {
@@ -69,6 +70,8 @@ export class BookFormComponent {
   }
 
   private loadBook() {
+    this.isLoading = true;
+
     if (this.bookId !== null) {
       this.bookService.getBook(this.bookId).subscribe({
         next: (book) => {
@@ -78,6 +81,12 @@ export class BookFormComponent {
             publishedDate: book.publishedDate || '',
             description: book.description || ''
           });
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.log('Error loading book:', error);
+          this.isLoading = false;
+          alert('Ett fel uppstod vid hämtning av boken. Försök igen senare.');
         }
       });
     }
