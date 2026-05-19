@@ -44,9 +44,11 @@ export class QuoteFormComponent {
       const updatedQuote: UpdateQuote = this.quoteForm.value;
       this.quoteService.updateQuote(this.quoteId, updatedQuote).subscribe({
         next: () => {
+          this.isSaving = false;
           this.router.navigate(['quotes'])
         },
         error: (error) => {
+          this.isSaving = false;
           console.error('Kunde inte uppdatera citatet:', error);
           alert('Ett fel uppstod vid uppdatering av citatet. Försök igen senare.');
         }
@@ -55,9 +57,11 @@ export class QuoteFormComponent {
       const createdQuote: CreateQuote = this.quoteForm.value;
       this.quoteService.createQuote(createdQuote).subscribe({
         next: () => {
+          this.isSaving = false;
           this.router.navigate(['quotes'])
         },
         error: (error) => {
+          this.isSaving = false;
           console.log('Kunde inte skapa citatet:', error);
           alert('Ett fel uppstod vid skapande av citatet. Försök igen senare.');
         }
