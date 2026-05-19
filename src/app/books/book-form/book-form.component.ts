@@ -46,9 +46,11 @@ export class BookFormComponent {
       const updatedBook: UpdateBook = this.bookForm.value;
       this.bookService.updateBook(this.bookId, updatedBook).subscribe({
         next: () => {
+          this.isSaving = false;
           this.router.navigate(['books'])
         },
         error: (error) => {
+          this.isSaving = false;
           console.error('Kunde inte uppdatera boken:', error);
           alert('Ett fel uppstod vid uppdatering av boken. Försök igen senare.');
         }
@@ -57,16 +59,16 @@ export class BookFormComponent {
       const createdBook: CreateBook = this.bookForm.value;
       this.bookService.createBook(createdBook).subscribe({
         next: () => {
+          this.isSaving = false;
           this.router.navigate(['books'])
         },
         error: (error) => {
+          this.isSaving = false;
           console.error('Kunde inte skapa boken:', error);
           alert('Ett fel uppstod vid skapande av boken. Försök igen senare.');
         }
       });
     }
-
-    this.isSaving = false;
   }
 
   private loadBook() {
@@ -75,10 +77,11 @@ export class BookFormComponent {
     if (this.bookId !== null) {
       this.bookService.getBook(this.bookId).subscribe({
         next: (book) => {
+          const formattedDate = book.publishedDate ? new Date(book.publishedDate).toISOString().slice(0, 10) : ''
           this.bookForm.patchValue({
             title: book.title || '',
             author: book.author || '',
-            publishedDate: book.publishedDate || '',
+            publishedDate: formattedDate, 
             description: book.description || ''
           });
           this.isLoading = false;
