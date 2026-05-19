@@ -21,13 +21,13 @@ export class BookListComponent {
   editBook(id: number, event: Event) {
     event.stopPropagation();
 
-    this.router.navigate(['/books', id])
+    this.router.navigate(['/books', id]);
   }
 
-  deleteBook(id: number, title: string, event: Event) {
+  deleteBook(id: number, event: Event) {
     event.stopPropagation();
 
-    if (confirm(`Är du säker på att du vill ta bort ${title}?`)) {
+    if (confirm("Är du säker på att du vill ta bort boken?")) {
       this.bookService.deleteBook(id).subscribe({
         next: () => {
           this.books$ = this.bookService.getBooks();

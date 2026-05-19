@@ -45,7 +45,7 @@ export class BookFormComponent {
       const updatedBook: UpdateBook = this.bookForm.value;
       this.bookService.updateBook(this.bookId, updatedBook).subscribe({
         next: () => {
-          this.router.navigate(['/books'])
+          this.router.navigate(['books'])
         },
         error: (error) => {
           console.error('Kunde inte uppdatera boken:', error);
@@ -56,7 +56,7 @@ export class BookFormComponent {
       const createdBook: CreateBook = this.bookForm.value;
       this.bookService.createBook(createdBook).subscribe({
         next: () => {
-          this.router.navigate(['/books'])
+          this.router.navigate(['books'])
         },
         error: (error) => {
           console.error('Kunde inte skapa boken:', error);

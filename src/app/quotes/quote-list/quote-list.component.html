@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="h3">Citat</h1>
+    <p class="text-muted">Hantera din lista med citat.</p>
+  </div>
+  <a routerLink="/quotes/new" class="btn btn-primary">Lägg till nytt citat</a>
+</div>
+
+<div class="table-responsive">
+  @if ((quotes$ | async); as quotes) {
+    @if (quotes.length > 0) {
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Citat</th>
+            <th>Författare</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (quote of quotes; track quote.id) {
+            <tr (click)="editQuote(quote.id, $event)" style="cursor: pointer;">
+              <td>{{ quote.text }}</td>
+              <td>{{ quote.author }}</td>
+              <td class="text-end">
+                <button
+                  class="btn btn-sm btn-secondary me-2" 
+                  (click)="editQuote(quote.id, $event)"
+                >
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button
+                  class="btn btn-sm btn-danger" 
+                  (click)="deleteQuote(quote.id, $event)"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+               </td>
+             </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <p class="text-muted text-center py-4">Inga citat. Klicka på "Lägg till nytt citat" för att skapa ett.</p>
+    }
+  }
+</div>

@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Book, CreateBook, UpdateBook } from '../models/book.model';
-import { environment } from '../../environments/environment.dev';
 import { ApiService } from './api.service';
 
 @Injectable({
