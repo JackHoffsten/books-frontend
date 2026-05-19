@@ -15,6 +15,9 @@
         id="username"
         formControlName="username"
         placeholder="Ange användarnamn"
+        autocapitalize="none"
+        autocomplete="off"
+        spellcheck="false"
         [class.is-invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
       >
       @if (registerForm.get('username')?.errors?.['required'] && registerForm.get('username')?.touched) {
