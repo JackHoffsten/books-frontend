@@ -4,6 +4,7 @@ import { BehaviorSubject, catchError, filter, Observable, switchMap, take, throw
 import { ApiError, ErrorCode } from '../models/api-error.model';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { AuthResponse } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +35,7 @@ export class ErrorHandlerService {
   }
 
   private transformToApiError(error: HttpErrorResponse): ApiError {
-    if (error.error == null) {
+    if (error.error === null) {
       return {
         title: error.statusText || 'Unknown Error',
         status: error.status,
@@ -59,7 +60,7 @@ export class ErrorHandlerService {
       this.waitingRequests.next(null);
 
       return this.authService.refreshToken().pipe(
-        switchMap((response: any) => {
+        switchMap((response: AuthResponse) => {
           this.isRefreshingToken = false;
           this.waitingRequests.next(response.accessToken);
           
