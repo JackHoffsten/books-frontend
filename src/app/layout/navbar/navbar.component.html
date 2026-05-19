@@ -1,30 +1,41 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" style="cursor: pointer;" routerLink="/">Books</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" routerLink="/">
+      <i class="fa-solid fa-book me-2"></i>Books
+    </a>
     <button class="navbar-toggler" type="button" (click)="toggleMenu()">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" [class.show]="isMenuOpen">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-end">
+      <ul class="navbar-nav me-auto">
         @if (isAuthenticated()) {
           <li class="nav-item">
-            <a class="nav-link" style="cursor: pointer;" routerLink="/books" (click)="closeMenu()">Böcker</a>
+            <a class="nav-link" routerLink="/books" routerLinkActive="active" (click)="closeMenu()">
+              Böcker
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" style="cursor: pointer;" routerLink="/quotes" (click)="closeMenu()">Mina citat</a>
+            <a class="nav-link" routerLink="/quotes" routerLinkActive="active" (click)="closeMenu()">
+              Citat
+            </a>
           </li>
         }
       </ul>
-      <div class="d-flex gap-2 navbar-nav mb-2 mb-lg-0 align-items-end">
+      <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
         @if (isAuthenticated()) {
-          <button class="btn btn-danger btn-sm" type="button" (click)="logout()">
-            Logga ut
+          <span class="text-white small">
+            <i class="fa-solid fa-user me-1"></i> {{ getUsername() }}
+          </span>
+          <button class="btn btn-outline-light btn-sm" (click)="logout()">
+            <i class="fa-solid fa-sign-out-alt me-1"></i> Logga ut
           </button>
         } @else {
-          <div class="d-flex flex-column flex-lg-row gap-2 w-100">
-            <a class="btn btn-primary btn-sm" routerLink="/login" (click)="closeMenu()">Logga in</a>
-            <a class="btn btn-outline-primary btn-sm" routerLink="/register" (click)="closeMenu()">Registrera</a>
-          </div>
+          <a class="btn btn-outline-light btn-sm w-lg-auto" routerLink="/login" (click)="closeMenu()">
+            <i class="fa-solid fa-sign-in-alt me-1"></i> Logga in
+          </a>
+          <a class="btn btn-light btn-sm w-lg-auto" routerLink="/register" (click)="closeMenu()">
+            <i class="fa-solid fa-user-plus me-1"></i> Registrera
+          </a>
         }
       </div>
     </div>

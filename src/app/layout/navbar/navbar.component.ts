@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
@@ -14,13 +14,26 @@ export class NavbarComponent {
   private readonly router: Router = inject(Router);
 
   protected isMenuOpen: boolean = false;
+  protected isUserMenuOpen: boolean = false;
+
+  getUsername(): string {
+    return this.authService.getUsername() || 'Användare';
+  }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+    this.isUserMenuOpen = false;
+  }
+
+  toggleUserMenu(event: Event) {
+    event.stopPropagation();
+
+    this.isUserMenuOpen = !this.isUserMenuOpen;
   }
 
   closeMenu() {
     this.isMenuOpen = false;
+    this.isUserMenuOpen = false;
   }
 
   isAuthenticated(): boolean {
