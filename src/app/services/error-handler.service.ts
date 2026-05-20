@@ -61,9 +61,26 @@ export class ErrorHandlerService {
       return this.authService.refreshToken().pipe(
         switchMap((response: AuthResponse) => {
           this.isRefreshingToken = false;
-          this.waitingRequests.next(response.accessToken);
+
+          console.log("refresh-token response:");
+          console.log(response);
+
+          const newAccessToken = this.authService.getAccessToken();
+          console.log(newAccessToken);
+          this.waitingRequests.next(newAccessToken);
+
+          const newReq = req.clone({
+            setHeaders: {
+              'Authorization': `Bearer ${newAccessToken}`
+            }
+          });
+
+          console.log("req");
+          console.log(req);
+          console.log("newReq");
+          console.log(newReq);
           
-          return next(req);
+          return next(newReq);
         }),
         catchError(() => {
           this.isRefreshingToken = false;
