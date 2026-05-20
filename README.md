@@ -10,7 +10,7 @@ Angular frontend for the Books API application.
 - RxJS
 - JWT Authentication
 
-## Prerquisites
+## Prerequisites
 
 - Node.js 20+
 
