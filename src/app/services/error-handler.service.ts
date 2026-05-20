@@ -17,8 +17,6 @@ export class ErrorHandlerService {
   private waitingRequests: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   handleError(req: HttpRequest<unknown>, error: HttpErrorResponse, next: HttpHandlerFn): Observable<never> {
-    console.log(error);
-
     const apiError = this.transformToApiError(error);
 
     if (apiError.status === 401) {
@@ -62,9 +60,6 @@ export class ErrorHandlerService {
         switchMap((response: AuthResponse) => {
           this.isRefreshingToken = false;
 
-          console.log("refresh-token response:");
-          console.log(response);
-
           const newAccessToken = this.authService.getAccessToken();
           console.log(newAccessToken);
           this.waitingRequests.next(newAccessToken);
@@ -74,11 +69,6 @@ export class ErrorHandlerService {
               'Authorization': `Bearer ${newAccessToken}`
             }
           });
-
-          console.log("req");
-          console.log(req);
-          console.log("newReq");
-          console.log(newReq);
           
           return next(newReq);
         }),
